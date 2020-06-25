@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SearchBar = ({ dataAPI, update }) => {
+function SearchBar({ dataAPI, update }){
   const [term, setTerm] = useState('')
 
   const dataSearch = e => {

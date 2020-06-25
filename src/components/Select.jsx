@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Select = ({ sortArray }) => {
+function Select({ sortArray }) {
 	return (
 		<>
 			<label htmlFor="selectSort">Sort by:</label>

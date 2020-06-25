@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Planets = ({ dataAPI, handleClickPlanet, active }) => {
+function Planets({ dataAPI, handleClickPlanet, active }){
   return (
     <>
       {dataAPI.map((item) => {

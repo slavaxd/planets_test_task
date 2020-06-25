@@ -1,24 +1,24 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import SearchBar from './components/SearchBar'
 import "./App.css";
 import data from "./API/data_for_test.json";
 import Planets from './components/Planets'
 import Select from './components/Select'
 
-class App extends Component {
-  state = {
+function App() {
+  const [{ dataAPI, description, active }, setApplicationState] = useState({
     dataAPI: data,
     description: "",
     active: ""
+  });
+
+  const handleClickPlanet = (id, data) => {
+    setApplicationState({ description: data, active: id, dataAPI });
   };
 
-  handleClickPlanet = (id, data) => {
-    this.setState({ description: data, active: id });
-  };
-
-  sortArray = (type) => {
+  const sortArray = (type) => {
     if (!type) {
-      this.setState({ dataAPI: data });
+      setApplicationState({ dataAPI: data, description, active });
 
       return
     };
@@ -33,48 +33,47 @@ class App extends Component {
     };
 
     const sortProperty = types[type];
-    const sorted = [...this.state.dataAPI].sort(
+    const sorted = [...dataAPI].sort(
       sortProperty.descending
         ? (a, b) => b[sortProperty.type][sortProperty.field] - a[sortProperty.type][sortProperty.field]
         : (a, b) => a[sortProperty.type][sortProperty.field] - b[sortProperty.type][sortProperty.field]
     );
 
-    this.setState({ dataAPI: sorted });
+    setApplicationState({ dataAPI: sorted, description, active });
   };
 
-  updateData = (config) => {
-    this.setState(config);
+  const updateData = (config) => {
+    setApplicationState({dataAPI, description, active, ...config});
   }
 
-  render() {
-    const { dataAPI } = this.state;
-    return (
-      <div className="App">
-        <ul className="navbar">
-          <li>
-            <Select sortArray={this.sortArray} />
-          </li>
-          <li>
-            <div className="searchbar form-group">
-              <form action="#">
-                <SearchBar
-                  dataAPI={data}
-                  update={this.updateData}
-                />
-              </form>
-            </div>
-          </li>
-        </ul>
 
-        <div className="content_grid">
-          <Planets dataAPI={dataAPI} handleClickPlanet={this.handleClickPlanet} active={this.state.active} />
-        </div>
+  return (
+    <div className="App">
+      <ul className="navbar">
+        <li>
+          <Select sortArray={sortArray} />
+        </li>
+        <li>
+          <div className="searchbar form-group">
+            <form action="#">
+              <SearchBar
+                dataAPI={data}
+                update={updateData}
+              />
+            </form>
+          </div>
+        </li>
+      </ul>
 
-        <div id="description">
-          {this.state.description}
-        </div>
+      <div className="content_grid">
+        <Planets dataAPI={dataAPI} handleClickPlanet={handleClickPlanet} active={active} />
       </div>
-    );
-  }
+
+      <div id="description">
+        {description}
+      </div>
+    </div>
+  )
 }
+
 export default App;
